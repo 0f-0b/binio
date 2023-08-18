@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "noImplicitOverride": true
+  },
+  "tasks": {
+    "lint": "deno fmt --check && deno lint",
+    "test": "deno test --check=all"
+  }
+}
