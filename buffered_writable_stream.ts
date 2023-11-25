@@ -4,6 +4,8 @@ export interface BufferedWritableStreamOptions {
 
 export class BufferedWritableStream
   extends WritableStream<Uint8Array | "flush"> {
+  #buffer: Uint8Array;
+
   constructor(
     stream: WritableStream<Uint8Array>,
     options?: BufferedWritableStreamOptions,
@@ -14,13 +16,13 @@ export class BufferedWritableStream
       throw new TypeError("Buffer is empty");
     }
     const writer = stream.getWriter();
-    let buffer = new Uint8Array(storage, 0, 0);
     super({
-      async write(chunk) {
+      write: async (chunk) => {
+        let buffer = this.#buffer;
         if (chunk === "flush") {
           if (buffer.length !== 0) {
             const promise = writer.write(buffer.slice());
-            buffer = buffer.subarray(0, 0);
+            this.#buffer = buffer.subarray(0, 0);
             await promise;
           }
           return;
@@ -29,7 +31,7 @@ export class BufferedWritableStream
         if (provided >= highWaterMark) {
           if (buffer.length !== 0) {
             writer.write(buffer.slice()).catch(() => {});
-            buffer = buffer.subarray(0, 0);
+            this.#buffer = buffer.subarray(0, 0);
           }
           await writer.write(chunk);
           return;
@@ -42,19 +44,25 @@ export class BufferedWritableStream
         }
         buffer = new Uint8Array(buffer.buffer, 0, buffered + provided);
         buffer.set(chunk, buffered);
+        this.#buffer = buffer;
         if (flushed) {
           await flushed;
         }
       },
-      async close() {
+      close: async () => {
+        const buffer = this.#buffer;
         if (buffer.length !== 0) {
           writer.write(buffer.slice()).catch(() => {});
+          this.#buffer = buffer.subarray(0, 0);
         }
         await writer.close();
       },
-      async abort(reason) {
-        await writer.abort(reason);
-      },
+      abort: (reason) => writer.abort(reason),
     });
+    this.#buffer = new Uint8Array(storage, 0, 0);
+  }
+
+  get bufferedAmount(): number {
+    return this.#buffer.length;
   }
 }
