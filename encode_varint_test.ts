@@ -5,7 +5,7 @@ import {
   encodeBigVarInt64LE,
   encodeVarInt32BE,
   encodeVarInt32LE,
-} from "./varint.ts";
+} from "./encode_varint.ts";
 
 Deno.test("encodeVarInt32LE", { permissions: "none" }, () => {
   assertEquals(encodeVarInt32LE(0x0, false), Uint8Array.of(0x00));
