@@ -4,6 +4,7 @@ export interface BufferedWritableStreamOptions {
 
 export class BufferedWritableStream
   extends WritableStream<Uint8Array | "flush"> {
+  readonly #writer: WritableStreamDefaultWriter<Uint8Array>;
   #buffer: Uint8Array;
 
   constructor(
@@ -15,9 +16,9 @@ export class BufferedWritableStream
     if (highWaterMark === 0) {
       throw new TypeError("Buffer is empty");
     }
-    const writer = stream.getWriter();
     super({
       write: async (chunk) => {
+        const writer = this.#writer;
         let buffer = this.#buffer;
         if (chunk === "flush") {
           if (buffer.length !== 0) {
@@ -50,6 +51,7 @@ export class BufferedWritableStream
         }
       },
       close: async () => {
+        const writer = this.#writer;
         const buffer = this.#buffer;
         if (buffer.length !== 0) {
           writer.write(buffer.slice()).catch(() => {});
@@ -57,12 +59,21 @@ export class BufferedWritableStream
         }
         await writer.close();
       },
-      abort: (reason) => writer.abort(reason),
+      abort: (reason) => this.#writer.abort(reason),
     });
+    this.#writer = stream.getWriter();
     this.#buffer = new Uint8Array(storage, 0, 0);
   }
 
   get bufferedAmount(): number {
     return this.#buffer.length;
+  }
+
+  discardBuffer(): number {
+    this.getWriter();
+    this.#writer.releaseLock();
+    const buffer = this.#buffer;
+    this.#buffer = buffer.subarray(0, 0);
+    return buffer.length;
   }
 }

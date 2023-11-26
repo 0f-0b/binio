@@ -7,6 +7,7 @@ export interface BufferedReadableStreamOptions {
 }
 
 export class BufferedReadableStream extends ReadableByteStream {
+  readonly #reader: ReadableStreamBYOBReader;
   #buffer: Uint8Array;
 
   constructor(
@@ -18,7 +19,6 @@ export class BufferedReadableStream extends ReadableByteStream {
     if (highWaterMark === 0) {
       throw new TypeError("Buffer is empty");
     }
-    const reader = stream.getReader({ mode: "byob" });
     super({
       pull: async (controller) => {
         const view = controller.byobRequest!.view!;
@@ -28,6 +28,7 @@ export class BufferedReadableStream extends ReadableByteStream {
           view.byteLength,
         );
         const requested = buf.length;
+        const reader = this.#reader;
         let buffer = this.#buffer;
         if (buffer.length === 0) {
           const highWaterMark = buffer.buffer.byteLength;
@@ -54,14 +55,23 @@ export class BufferedReadableStream extends ReadableByteStream {
         this.#buffer = buffer.subarray(available);
         controller.byobRequest!.respond(available);
       },
-      cancel: (reason) => reader.cancel(reason),
+      cancel: (reason) => this.#reader.cancel(reason),
       type: "bytes",
       autoAllocateChunkSize: highWaterMark,
     });
+    this.#reader = stream.getReader({ mode: "byob" });
     this.#buffer = new Uint8Array(storage, 0, 0);
   }
 
   get bufferedAmount(): number {
     return this.#buffer.length;
+  }
+
+  discardBuffer(): number {
+    this.getReader();
+    this.#reader.releaseLock();
+    const buffer = this.#buffer;
+    this.#buffer = buffer.subarray(buffer.length);
+    return buffer.length;
   }
 }
