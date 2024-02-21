@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
   },
   "tasks": {
     "lint": "deno fmt --check && deno lint",
