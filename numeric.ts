@@ -277,7 +277,7 @@ export function readBigVarUint64BESync(r: BufferReader): bigint | null {
 }
 
 export async function writeInt8(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(1);
@@ -291,7 +291,7 @@ export function writeInt8Sync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeInt16LE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(2);
@@ -305,7 +305,7 @@ export function writeInt16LESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeInt16BE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(2);
@@ -319,7 +319,7 @@ export function writeInt16BESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeInt32LE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -333,7 +333,7 @@ export function writeInt32LESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeInt32BE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -347,7 +347,7 @@ export function writeInt32BESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeBigInt64LE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: bigint,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);
@@ -361,7 +361,7 @@ export function writeBigInt64LESync(w: BufferWriter, value: bigint): undefined {
 }
 
 export async function writeBigInt64BE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: bigint,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);
@@ -375,7 +375,7 @@ export function writeBigInt64BESync(w: BufferWriter, value: bigint): undefined {
 }
 
 export async function writeVarInt32LE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   await w.write(encodeVarInt32LE(value, true));
@@ -386,7 +386,7 @@ export function writeVarInt32LESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeVarInt32BE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: number,
 ): Promise<undefined> {
   await w.write(encodeVarInt32BE(value, true));
@@ -397,7 +397,7 @@ export function writeVarInt32BESync(w: BufferWriter, value: number): undefined {
 }
 
 export async function writeBigVarInt64LE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: bigint,
 ): Promise<undefined> {
   await w.write(encodeBigVarInt64LE(value, true));
@@ -411,7 +411,7 @@ export function writeBigVarInt64LESync(
 }
 
 export async function writeBigVarInt64BE(
-  w: WritableStreamDefaultWriter,
+  w: WritableStreamDefaultWriter<Uint8Array>,
   value: bigint,
 ): Promise<undefined> {
   await w.write(encodeBigVarInt64BE(value, true));
