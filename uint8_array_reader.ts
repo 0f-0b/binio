@@ -1,14 +1,28 @@
-const ReadableByteStream: new (
-  underlyingSource: UnderlyingByteSource,
-) => ReadableStream<Uint8Array> = ReadableStream;
+import { ReadableByteStream } from "./readable_byte_stream.ts";
 
-export class BufferReader {
+/** A byte reader that consumes a {@linkcode Uint8Array}. */
+export class Uint8ArrayReader {
   #buffer: Uint8Array;
 
+  /**
+   * Creates a new {@linkcode Uint8ArrayReader} with the provided
+   * {@linkcode Uint8Array}.
+   */
   constructor(bytes: Uint8Array) {
     this.#buffer = bytes;
   }
 
+  /**
+   * Consumes at most `buf.length` bytes from the start of the
+   * {@linkcode Uint8Array} and writes them into `buf`.
+   *
+   * ### Exceptions
+   *
+   * - {@linkcode TypeError} &ndash; `buf` is empty.
+   *
+   * @returns A {@linkcode Uint8Array} over the same memory region as the
+   * original `buf` containing the bytes read.
+   */
   read(buf: Uint8Array): Uint8Array {
     const requested = buf.length;
     if (requested === 0) {
@@ -20,19 +34,26 @@ export class BufferReader {
     return buf.subarray(0, available);
   }
 
+  /**
+   * Consumes all remaining bytes from the {@linkcode Uint8Array}.
+   *
+   * @returns The bytes read.
+   */
   readAll(): Uint8Array {
     const buffer = this.#buffer;
     this.#buffer = buffer.subarray(buffer.length);
     return buffer;
   }
 
-  asStream(): ReadableStream<Uint8Array> {
-    return new BufferReaderStream(this);
+  /** Returns a readable byte stream backed by this reader. */
+  asStream(): Uint8ArrayReaderStream {
+    return new Uint8ArrayReaderStream(this);
   }
 }
 
-export class BufferReaderStream extends ReadableByteStream {
-  constructor(reader: BufferReader) {
+/** A readable byte stream backed by a {@linkcode Uint8ArrayReader}. */
+export class Uint8ArrayReaderStream extends ReadableByteStream {
+  constructor(reader: Uint8ArrayReader) {
     super({
       pull(controller) {
         if (controller.byobRequest) {

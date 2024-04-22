@@ -1,4 +1,4 @@
-import { assertEquals } from "./deps/std/assert/assert_equals.ts";
+import { assertEquals } from "@std/assert/assert-equals";
 
 import { BufferedWritableStream } from "./buffered_writable_stream.ts";
 
@@ -20,9 +20,9 @@ Deno.test("writable", { permissions: "none" }, async () => {
   await writer.write(Uint8Array.of(1));
   await writer.write(Uint8Array.of(2, 3));
   assertNewChunks([]);
-  await writer.write("flush");
+  await writer.write({ type: "flush" });
   assertNewChunks([Uint8Array.of(1, 2, 3)]);
-  await writer.write(Uint8Array.of(4, 5, 6));
+  await writer.write({ type: "write", data: Uint8Array.of(4, 5, 6) });
   assertNewChunks([]);
   await writer.write(Uint8Array.of(7, 8, 9, 10, 11));
   assertNewChunks([Uint8Array.of(4, 5, 6), Uint8Array.of(7, 8, 9, 10, 11)]);

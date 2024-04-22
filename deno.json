@@ -1,8 +1,32 @@
 {
+  "name": "@ud2/binio",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./buffered-readable-stream": "./buffered_readable_stream.ts",
+    "./buffered-writable-stream": "./buffered_writable_stream.ts",
+    "./numeric": "./numeric.ts",
+    "./read-full": "./read_full.ts",
+    "./readable-byte-stream": "./readable_byte_stream.ts",
+    "./uint8-array-reader": "./uint8_array_reader.ts",
+    "./uint8-array-writer": "./uint8_array_writer.ts",
+    "./unexpected-eof": "./unexpected_eof.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^0.223.0"
+  },
   "compilerOptions": {
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true
+  },
+  "publish": {
+    "exclude": [
+      ".github",
+      "deno.lock",
+      "**/test.ts",
+      "**/*_test.ts"
+    ]
   },
   "tasks": {
     "lint": "deno fmt --check && deno lint",

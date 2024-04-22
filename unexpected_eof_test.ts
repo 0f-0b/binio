@@ -1,7 +1,9 @@
-import { assertThrows } from "./deps/std/assert/assert_throws.ts";
+import { assertStrictEquals } from "@std/assert/assert-strict-equals";
+import { assertThrows } from "@std/assert/assert-throws";
 
-import { unexpectedEof } from "./unexpected_eof.ts";
+import { UnexpectedEof, unexpectedEof } from "./unexpected_eof.ts";
 
 Deno.test("unexpectedEof", { permissions: "none" }, () => {
-  assertThrows(unexpectedEof, Deno.errors.UnexpectedEof);
+  assertStrictEquals(UnexpectedEof, Deno.errors.UnexpectedEof);
+  assertThrows(unexpectedEof, UnexpectedEof);
 });
