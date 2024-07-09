@@ -13,7 +13,7 @@
     "./unexpected-eof": "./unexpected_eof.ts"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@^0.223.0"
+    "@std/assert": "jsr:@std/assert@^1.0.0"
   },
   "compilerOptions": {
     "noImplicitOverride": true,

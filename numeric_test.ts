@@ -1,7 +1,7 @@
-import { assertEquals } from "@std/assert/assert-equals";
-import { assertRejects } from "@std/assert/assert-rejects";
-import { assertStrictEquals } from "@std/assert/assert-strict-equals";
-import { assertThrows } from "@std/assert/assert-throws";
+import { assertEquals } from "@std/assert/equals";
+import { assertRejects } from "@std/assert/rejects";
+import { assertStrictEquals } from "@std/assert/strict-equals";
+import { assertThrows } from "@std/assert/throws";
 
 import {
   readBigInt64BE,

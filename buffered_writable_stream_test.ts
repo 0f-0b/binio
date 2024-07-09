@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert/assert-equals";
+import { assertEquals } from "@std/assert/equals";
 
 import { BufferedWritableStream } from "./buffered_writable_stream.ts";
 
