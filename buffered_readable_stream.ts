@@ -6,7 +6,7 @@ import { ReadableByteStream } from "./readable_byte_stream.ts";
  */
 export interface BufferedReadableStreamOptions {
   /** The buffer size. */
-  highWaterMark?: number;
+  highWaterMark?: number | undefined;
 }
 
 /**

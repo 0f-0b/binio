@@ -10,7 +10,7 @@ export type BufferedWriteChunkType =
  */
 export interface BufferedWritableStreamOptions {
   /** The buffer size. */
-  highWaterMark?: number;
+  highWaterMark?: number | undefined;
 }
 
 /**
