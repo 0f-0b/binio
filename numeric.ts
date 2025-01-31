@@ -732,7 +732,7 @@ export async function readBigVarInt64LE(
       }
       return null;
     }
-    result |= BigInt(b & 0x7f) << shift[len]!;
+    result |= BigInt(b & 0x7f) << shift[len];
     if (!(b & 0x80)) {
       break;
     }
@@ -768,7 +768,7 @@ export function readBigVarInt64LESync(r: Uint8ArrayReader): bigint | null {
       }
       return null;
     }
-    result |= BigInt(b & 0x7f) << shift[len]!;
+    result |= BigInt(b & 0x7f) << shift[len];
     if (!(b & 0x80)) {
       break;
     }
@@ -808,7 +808,7 @@ export async function readBigVarUint64LE(
       }
       return null;
     }
-    result |= BigInt(b & 0x7f) << shift[len]!;
+    result |= BigInt(b & 0x7f) << shift[len];
     if (!(b & 0x80)) {
       break;
     }
@@ -843,7 +843,7 @@ export function readBigVarUint64LESync(r: Uint8ArrayReader): bigint | null {
       }
       return null;
     }
-    result |= BigInt(b & 0x7f) << shift[len]!;
+    result |= BigInt(b & 0x7f) << shift[len];
     if (!(b & 0x80)) {
       break;
     }

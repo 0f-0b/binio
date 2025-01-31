@@ -14,7 +14,7 @@ function bitCeil(x: number): number {
     return x;
   }
   f64Buf[0] = x;
-  u64Buf[0] = ((u64Buf[0]! - 1n) | 0xfffffffffffffn) + 1n;
+  u64Buf[0] = ((u64Buf[0] - 1n) | 0xfffffffffffffn) + 1n;
   return f64Buf[0];
 }
 
