@@ -12,11 +12,12 @@ import type { Uint8ArrayWriter } from "./uint8_array_writer.ts";
 import { unexpectedEof } from "./unexpected_eof.ts";
 
 const { min } = Math;
-const syncBuf8 = new Uint8Array(8);
-const syncBuf4 = syncBuf8.subarray(0, 4);
-const syncBuf2 = syncBuf8.subarray(0, 2);
-const syncBuf1 = syncBuf8.subarray(0, 1);
-const syncView = new DataView(syncBuf8.buffer);
+const syncBuf = new Uint8Array(10);
+const syncBuf8 = syncBuf.subarray(0, 8);
+const syncBuf4 = syncBuf.subarray(0, 4);
+const syncBuf2 = syncBuf.subarray(0, 2);
+const syncBuf1 = syncBuf.subarray(0, 1);
+const syncView = new DataView(syncBuf.buffer);
 const shift = Object.freeze([0n, 7n, 14n, 21n, 28n, 35n, 42n, 49n, 56n, 63n]);
 
 /**
@@ -1273,7 +1274,8 @@ export async function writeVarInt32LE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
-  await w.write(encodeVarInt32LE(value, true));
+  const len = encodeVarInt32LE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1284,7 +1286,8 @@ export function writeVarInt32LESync(
   w: Uint8ArrayWriter,
   value: number,
 ): undefined {
-  w.write(encodeVarInt32LE(value, false));
+  const len = encodeVarInt32LE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
@@ -1299,7 +1302,8 @@ export async function writeVarUint32LE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
-  await w.write(encodeVarUint32LE(value, true));
+  const len = encodeVarUint32LE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1310,7 +1314,8 @@ export function writeVarUint32LESync(
   w: Uint8ArrayWriter,
   value: number,
 ): undefined {
-  w.write(encodeVarUint32LE(value, false));
+  const len = encodeVarUint32LE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
@@ -1325,7 +1330,8 @@ export async function writeVarUint32BE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
-  await w.write(encodeVarUint32BE(value, true));
+  const len = encodeVarUint32BE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1336,7 +1342,8 @@ export function writeVarUint32BESync(
   w: Uint8ArrayWriter,
   value: number,
 ): undefined {
-  w.write(encodeVarUint32BE(value, false));
+  const len = encodeVarUint32BE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
@@ -1351,7 +1358,8 @@ export async function writeBigVarInt64LE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
-  await w.write(encodeBigVarInt64LE(value, true));
+  const len = encodeBigVarInt64LE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1362,7 +1370,8 @@ export function writeBigVarInt64LESync(
   w: Uint8ArrayWriter,
   value: bigint,
 ): undefined {
-  w.write(encodeBigVarInt64LE(value, false));
+  const len = encodeBigVarInt64LE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
@@ -1377,7 +1386,8 @@ export async function writeBigVarUint64LE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
-  await w.write(encodeBigVarUint64LE(value, true));
+  const len = encodeBigVarUint64LE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1388,7 +1398,8 @@ export function writeBigVarUint64LESync(
   w: Uint8ArrayWriter,
   value: bigint,
 ): undefined {
-  w.write(encodeBigVarUint64LE(value, false));
+  const len = encodeBigVarUint64LE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
@@ -1403,7 +1414,8 @@ export async function writeBigVarUint64BE(
   w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
-  await w.write(encodeBigVarUint64BE(value, true));
+  const len = encodeBigVarUint64BE(syncBuf, value);
+  await w.write(syncBuf.slice(0, len));
 }
 
 /**
@@ -1414,7 +1426,8 @@ export function writeBigVarUint64BESync(
   w: Uint8ArrayWriter,
   value: bigint,
 ): undefined {
-  w.write(encodeBigVarUint64BE(value, false));
+  const len = encodeBigVarUint64BE(syncBuf, value);
+  w.write(syncBuf.subarray(0, len));
 }
 
 /**
