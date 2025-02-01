@@ -22,7 +22,7 @@ export interface BufferedWritableStreamOptions {
 export class BufferedWritableStream
   extends WritableStream<BufferedWriteChunkType> {
   readonly #writer: WritableStreamDefaultWriter<Uint8Array>;
-  #buffer: Uint8Array;
+  #buffer: Uint8Array<ArrayBuffer>;
 
   /**
    * Creates a new {@linkcode BufferedWritableStream} to write data to the
@@ -65,17 +65,17 @@ export class BufferedWritableStream
               await writer.write(data);
               break;
             }
-            let flushed: Promise<undefined> | undefined;
+            let promise: Promise<unknown> | undefined;
             let buffered = buffer.length;
             if (buffered + provided > highWaterMark) {
-              flushed = writer.write(buffer.slice()) as Promise<undefined>;
+              promise = writer.write(buffer.slice());
               buffered = 0;
             }
             buffer = new Uint8Array(buffer.buffer, 0, buffered + provided);
             buffer.set(data, buffered);
             this.#buffer = buffer;
-            if (flushed) {
-              await flushed;
+            if (promise) {
+              await promise;
             }
             break;
           }
@@ -120,7 +120,7 @@ export class BufferedWritableStream
    * @returns The internal buffer containing data that has not been written to
    * the underlying stream yet.
    */
-  releaseLock(): Uint8Array {
+  releaseLock(): Uint8Array<ArrayBuffer> {
     this.getWriter();
     this.#writer.releaseLock();
     const buffer = this.#buffer;

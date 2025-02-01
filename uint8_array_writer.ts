@@ -18,9 +18,14 @@ function bitCeil(x: number): number {
   return f64Buf[0];
 }
 
+function mightGrow(array: Uint8Array, originalLength: number): boolean {
+  return "growable" in array.buffer &&
+    array.buffer.maxByteLength - array.byteOffset > originalLength;
+}
+
 /** A byte writer that produces a {@linkcode Uint8Array}. */
 export class Uint8ArrayWriter {
-  #buffer: Uint8Array;
+  #buffer: Uint8Array<ArrayBuffer>;
 
   /**
    * Creates a new {@linkcode Uint8ArrayWriter} whose {@linkcode Uint8Array}
@@ -32,7 +37,7 @@ export class Uint8ArrayWriter {
   }
 
   /** The {@linkcode Uint8Array} being produced. */
-  get bytes(): Uint8Array {
+  get bytes(): Uint8Array<ArrayBuffer> {
     return this.#buffer;
   }
 
@@ -45,14 +50,18 @@ export class Uint8ArrayWriter {
    *   reallocated.
    */
   write(chunk: Uint8Array): undefined {
+    const buffer = this.#buffer;
     const provided = chunk.length;
-    const buffered = this.#buffer.length;
-    const storage = this.#buffer.buffer;
+    if (mightGrow(chunk, provided)) {
+      chunk = chunk.subarray(0, provided);
+    }
+    const buffered = buffer.length;
+    const storage = buffer.buffer;
     const total = buffered + provided;
     if (total > storage.byteLength) {
       const storage = new ArrayBuffer(bitCeil(total));
       const realloc = new Uint8Array(storage, 0, total);
-      realloc.set(this.#buffer);
+      realloc.set(buffer);
       this.#buffer = realloc;
     } else {
       this.#buffer = new Uint8Array(storage, 0, total);

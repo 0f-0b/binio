@@ -11,6 +11,7 @@ import type { Uint8ArrayReader } from "./uint8_array_reader.ts";
 import type { Uint8ArrayWriter } from "./uint8_array_writer.ts";
 import { unexpectedEof } from "./unexpected_eof.ts";
 
+const { min } = Math;
 const syncBuf8 = new Uint8Array(8);
 const syncBuf4 = syncBuf8.subarray(0, 4);
 const syncBuf2 = syncBuf8.subarray(0, 2);
@@ -516,7 +517,7 @@ export async function readVarInt32LE(
       throw new TypeError("Varint is too long");
     }
   }
-  const shift = 32 - Math.min((len + 1) * 7, 32);
+  const shift = 32 - min((len + 1) * 7, 32);
   return result << shift >> shift;
 }
 
@@ -552,7 +553,7 @@ export function readVarInt32LESync(r: Uint8ArrayReader): number | null {
       throw new TypeError("Varint is too long");
     }
   }
-  const shift = Math.max(32 - (len + 1) * 7, 0);
+  const shift = 32 - min((len + 1) * 7, 32);
   return result << shift >> shift;
 }
 
@@ -740,7 +741,7 @@ export async function readBigVarInt64LE(
       throw new TypeError("Varint is too long");
     }
   }
-  const width = Math.min((len + 1) * 7, 64);
+  const width = min((len + 1) * 7, 64);
   return BigInt.asIntN(width, result);
 }
 
@@ -776,7 +777,7 @@ export function readBigVarInt64LESync(r: Uint8ArrayReader): bigint | null {
       throw new TypeError("Varint is too long");
     }
   }
-  const width = Math.min((len + 1) * 7, 64);
+  const width = min((len + 1) * 7, 64);
   return BigInt.asIntN(width, result);
 }
 
@@ -1072,7 +1073,7 @@ export function readFloat64BESync(r: Uint8ArrayReader): number | null {
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeInt8(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(1);
@@ -1095,7 +1096,7 @@ export function writeInt8Sync(w: Uint8ArrayWriter, value: number): undefined {
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeInt16LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(2);
@@ -1124,7 +1125,7 @@ export function writeInt16LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeInt16BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(2);
@@ -1153,7 +1154,7 @@ export function writeInt16BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeInt32LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -1182,7 +1183,7 @@ export function writeInt32LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeInt32BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -1211,7 +1212,7 @@ export function writeInt32BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeBigInt64LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);
@@ -1240,7 +1241,7 @@ export function writeBigInt64LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeBigInt64BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);
@@ -1269,7 +1270,7 @@ export function writeBigInt64BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeVarInt32LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   await w.write(encodeVarInt32LE(value, true));
@@ -1295,7 +1296,7 @@ export function writeVarInt32LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeVarUint32LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   await w.write(encodeVarUint32LE(value, true));
@@ -1321,7 +1322,7 @@ export function writeVarUint32LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeVarUint32BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   await w.write(encodeVarUint32BE(value, true));
@@ -1347,7 +1348,7 @@ export function writeVarUint32BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeBigVarInt64LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
   await w.write(encodeBigVarInt64LE(value, true));
@@ -1373,7 +1374,7 @@ export function writeBigVarInt64LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeBigVarUint64LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
   await w.write(encodeBigVarUint64LE(value, true));
@@ -1399,7 +1400,7 @@ export function writeBigVarUint64LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeBigVarUint64BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: bigint,
 ): Promise<undefined> {
   await w.write(encodeBigVarUint64BE(value, true));
@@ -1425,7 +1426,7 @@ export function writeBigVarUint64BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeFloat32LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -1453,7 +1454,7 @@ export function writeFloat32LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeFloat32BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(4);
@@ -1481,7 +1482,7 @@ export function writeFloat32BESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeFloat64LE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);
@@ -1509,7 +1510,7 @@ export function writeFloat64LESync(
  * - {@linkcode TypeError} &ndash; The stream is closed.
  */
 export async function writeFloat64BE(
-  w: WritableStreamDefaultWriter<Uint8Array>,
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
   value: number,
 ): Promise<undefined> {
   const buf = new Uint8Array(8);

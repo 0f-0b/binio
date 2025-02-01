@@ -19,8 +19,8 @@ import { unexpectedEof } from "./unexpected_eof.ts";
  */
 export async function readFull(
   r: ReadableStreamBYOBReader,
-  buf: Uint8Array,
-): Promise<Uint8Array | null> {
+  buf: Uint8Array<ArrayBuffer>,
+): Promise<Uint8Array<ArrayBuffer> | null> {
   const { value, done } = await r.read(buf, { min: buf.length });
   if (done) {
     if (!value || value.length === 0) {
@@ -43,10 +43,10 @@ export async function readFull(
  * @returns A {@linkcode Uint8Array} over the same memory region as `buf`
  * containing the bytes read, or `null` if no bytes can be read.
  */
-export function readFullSync(
+export function readFullSync<B extends ArrayBufferLike>(
   r: Uint8ArrayReader,
-  buf: Uint8Array,
-): Uint8Array | null {
+  buf: Uint8Array<B>,
+): Uint8Array<B> | null {
   const requested = buf.length;
   buf = r.read(buf);
   if (buf.length === 0) {

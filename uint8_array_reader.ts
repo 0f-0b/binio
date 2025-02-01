@@ -1,14 +1,16 @@
 import { ReadableByteStream } from "./readable_byte_stream.ts";
 
+const { min } = Math;
+
 /** A byte reader that consumes a {@linkcode Uint8Array}. */
 export class Uint8ArrayReader {
-  #buffer: Uint8Array;
+  #buffer: Uint8Array<ArrayBuffer>;
 
   /**
    * Creates a new {@linkcode Uint8ArrayReader} with the provided
    * {@linkcode Uint8Array}.
    */
-  constructor(bytes: Uint8Array) {
+  constructor(bytes: Uint8Array<ArrayBuffer>) {
     this.#buffer = bytes;
   }
 
@@ -23,15 +25,17 @@ export class Uint8ArrayReader {
    * @returns A {@linkcode Uint8Array} over the same memory region as the
    * original `buf` containing the bytes read.
    */
-  read(buf: Uint8Array): Uint8Array {
+  read<B extends ArrayBufferLike>(buf: Uint8Array<B>): Uint8Array<B> {
+    const buffer = this.#buffer;
     const requested = buf.length;
     if (requested === 0) {
       throw new TypeError("Cannot read into empty view");
     }
-    const available = Math.min(this.#buffer.length, requested);
-    buf.set(this.#buffer.subarray(0, available));
-    this.#buffer = this.#buffer.subarray(available);
-    return buf.subarray(0, available);
+    const available = min(buffer.length, requested);
+    buf = buf.subarray(0, available);
+    buf.set(buffer.subarray(0, available));
+    this.#buffer = buffer.subarray(available);
+    return buf;
   }
 
   /**
@@ -39,7 +43,7 @@ export class Uint8ArrayReader {
    *
    * @returns The bytes read.
    */
-  readAll(): Uint8Array {
+  readAll(): Uint8Array<ArrayBuffer> {
     const buffer = this.#buffer;
     this.#buffer = buffer.subarray(buffer.length);
     return buffer;

@@ -63,7 +63,10 @@ function lengthOfBigVarUint64(value: bigint): number {
 
 const syncBuf = new Uint8Array(10);
 
-export function encodeVarInt32LE(value: number, copy: boolean): Uint8Array {
+export function encodeVarInt32LE(
+  value: number,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value |= 0;
   const len = lengthOfVarInt32(value);
   for (let i = 0; i < len; i++) {
@@ -74,7 +77,10 @@ export function encodeVarInt32LE(value: number, copy: boolean): Uint8Array {
   return copy ? syncBuf.slice(0, len + 1) : syncBuf.subarray(0, len + 1);
 }
 
-export function encodeVarUint32LE(value: number, copy: boolean): Uint8Array {
+export function encodeVarUint32LE(
+  value: number,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value >>>= 0;
   const len = lengthOfVarUint32(value);
   for (let i = 0; i < len; i++) {
@@ -85,7 +91,10 @@ export function encodeVarUint32LE(value: number, copy: boolean): Uint8Array {
   return copy ? syncBuf.slice(0, len + 1) : syncBuf.subarray(0, len + 1);
 }
 
-export function encodeVarUint32BE(value: number, copy: boolean): Uint8Array {
+export function encodeVarUint32BE(
+  value: number,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value >>>= 0;
   const len = lengthOfVarUint32(value);
   syncBuf[len] = value & 0x7f;
@@ -96,7 +105,10 @@ export function encodeVarUint32BE(value: number, copy: boolean): Uint8Array {
   return copy ? syncBuf.slice(0, len + 1) : syncBuf.subarray(0, len + 1);
 }
 
-export function encodeBigVarInt64LE(value: bigint, copy: boolean): Uint8Array {
+export function encodeBigVarInt64LE(
+  value: bigint,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value = asIntN(64, value);
   const len = lengthOfBigVarInt64(value);
   for (let i = 0; i < len; i++) {
@@ -107,7 +119,10 @@ export function encodeBigVarInt64LE(value: bigint, copy: boolean): Uint8Array {
   return copy ? syncBuf.slice(0, len + 1) : syncBuf.subarray(0, len + 1);
 }
 
-export function encodeBigVarUint64LE(value: bigint, copy: boolean): Uint8Array {
+export function encodeBigVarUint64LE(
+  value: bigint,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value = asUintN(64, value);
   const len = lengthOfBigVarUint64(value);
   for (let i = 0; i < len; i++) {
@@ -118,7 +133,10 @@ export function encodeBigVarUint64LE(value: bigint, copy: boolean): Uint8Array {
   return copy ? syncBuf.slice(0, len + 1) : syncBuf.subarray(0, len + 1);
 }
 
-export function encodeBigVarUint64BE(value: bigint, copy: boolean): Uint8Array {
+export function encodeBigVarUint64BE(
+  value: bigint,
+  copy: boolean,
+): Uint8Array<ArrayBuffer> {
   value = asUintN(64, value);
   const len = lengthOfBigVarUint64(value);
   syncBuf[len] = Number(value & 0x7fn);

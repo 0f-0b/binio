@@ -1,5 +1,7 @@
 import { ReadableByteStream } from "./readable_byte_stream.ts";
 
+const { min } = Math;
+
 /**
  * Options that can be passed to the {@linkcode BufferedReadableStream}
  * constructor.
@@ -17,7 +19,7 @@ export interface BufferedReadableStreamOptions {
  */
 export class BufferedReadableStream extends ReadableByteStream {
   readonly #reader: ReadableStreamBYOBReader;
-  #buffer: Uint8Array;
+  #buffer: Uint8Array<ArrayBuffer>;
 
   /**
    * Creates a new {@linkcode BufferedReadableStream} to read data from the
@@ -73,7 +75,7 @@ export class BufferedReadableStream extends ReadableByteStream {
           }
           buffer = result.value;
         }
-        const available = Math.min(buffer.length, requested);
+        const available = min(buffer.length, requested);
         buf.set(buffer.subarray(0, available));
         this.#buffer = buffer.subarray(available);
         controller.byobRequest!.respond(available);
@@ -102,7 +104,7 @@ export class BufferedReadableStream extends ReadableByteStream {
    * @returns The internal buffer containing data that has already been read
    * from the underlying stream.
    */
-  releaseLock(): Uint8Array {
+  releaseLock(): Uint8Array<ArrayBuffer> {
     this.getReader();
     this.#reader.releaseLock();
     const buffer = this.#buffer;
