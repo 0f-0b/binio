@@ -1,6 +1,5 @@
 {
   "name": "@ud2/binio",
-  "version": "0.0.0",
   "exports": {
     ".": "./mod.ts",
     "./buffered-readable-stream": "./buffered_readable_stream.ts",

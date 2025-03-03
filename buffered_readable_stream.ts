@@ -36,7 +36,7 @@ export class BufferedReadableStream extends ReadableByteStream {
    *   locked.
    */
   constructor(
-    stream: ReadableStream<Uint8Array>,
+    stream: ReadableStream<Uint8Array<ArrayBuffer>>,
     options?: BufferedReadableStreamOptions,
   ) {
     const storage = new ArrayBuffer(options?.highWaterMark ?? 2048);
