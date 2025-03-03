@@ -931,6 +931,74 @@ export function readBigVarUint64BESync(r: Uint8ArrayReader): bigint | null {
 }
 
 /**
+ * Reads a 16-bit floating-point number from `r` in little-endian format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
+ *   returned promise resolves.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
+ *   read are not enough to form a 16-bit floating-point number.
+ *
+ * @returns A {@linkcode Promise} that fulfills with the resulting value, or
+ * `null` if the stream ends before any bytes are read.
+ */
+export async function readFloat16LE(
+  r: ReadableStreamBYOBReader,
+): Promise<number | null> {
+  const buf = await readFull(r, new Uint8Array(2));
+  return buf && new DataView(buf.buffer).getFloat16(0, true);
+}
+
+/**
+ * Reads a 16-bit floating-point number from `r` in little-endian format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
+ *   read are not enough to form a 16-bit floating-point number.
+ *
+ * @returns The resulting value, or `null` if no bytes can be read.
+ */
+export function readFloat16LESync(r: Uint8ArrayReader): number | null {
+  return readFullSync(r, syncBuf2) && syncView.getFloat16(0, true);
+}
+
+/**
+ * Reads a 16-bit floating-point number from `r` in big-endian format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
+ *   returned promise resolves.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
+ *   read are not enough to form a 16-bit floating-point number.
+ *
+ * @returns A {@linkcode Promise} that fulfills with the resulting value, or
+ * `null` if the stream ends before any bytes are read.
+ */
+export async function readFloat16BE(
+  r: ReadableStreamBYOBReader,
+): Promise<number | null> {
+  const buf = await readFull(r, new Uint8Array(2));
+  return buf && new DataView(buf.buffer).getFloat16(0);
+}
+
+/**
+ * Reads a 16-bit floating-point number from `r` in big-endian format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
+ *   read are not enough to form a 16-bit floating-point number.
+ *
+ * @returns The resulting value, or `null` if no bytes can be read.
+ */
+export function readFloat16BESync(r: Uint8ArrayReader): number | null {
+  return readFullSync(r, syncBuf2) && syncView.getFloat16(0);
+}
+
+/**
  * Reads a 32-bit floating-point number from `r` in little-endian format.
  *
  * ### Exceptions
@@ -1428,6 +1496,62 @@ export function writeBigVarUint64BESync(
 ): undefined {
   const len = encodeBigVarUint64BE(syncBuf, value);
   w.write(syncBuf.subarray(0, len));
+}
+
+/**
+ * Writes the 16-bit floating-point number `value` to `w` in little-endian
+ * format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode TypeError} &ndash; The stream is closed.
+ */
+export async function writeFloat16LE(
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
+  value: number,
+): Promise<undefined> {
+  const buf = new Uint8Array(2);
+  new DataView(buf.buffer).setFloat16(0, value, true);
+  await w.write(buf);
+}
+
+/**
+ * Writes the 16-bit floating-point number `value` to `w` in little-endian
+ * format.
+ */
+export function writeFloat16LESync(
+  w: Uint8ArrayWriter,
+  value: number,
+): undefined {
+  syncView.setFloat16(0, value, true);
+  w.write(syncBuf2);
+}
+
+/**
+ * Writes the 16-bit floating-point number `value` to `w` in big-endian format.
+ *
+ * ### Exceptions
+ *
+ * - {@linkcode TypeError} &ndash; The stream is closed.
+ */
+export async function writeFloat16BE(
+  w: WritableStreamDefaultWriter<Uint8Array<ArrayBuffer>>,
+  value: number,
+): Promise<undefined> {
+  const buf = new Uint8Array(2);
+  new DataView(buf.buffer).setFloat16(0, value);
+  await w.write(buf);
+}
+
+/**
+ * Writes the 16-bit floating-point number `value` to `w` in big-endian format.
+ */
+export function writeFloat16BESync(
+  w: Uint8ArrayWriter,
+  value: number,
+): undefined {
+  syncView.setFloat16(0, value);
+  w.write(syncBuf2);
 }
 
 /**

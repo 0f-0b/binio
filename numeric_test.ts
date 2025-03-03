@@ -18,6 +18,10 @@ import {
   readBigVarUint64BESync,
   readBigVarUint64LE,
   readBigVarUint64LESync,
+  readFloat16BE,
+  readFloat16BESync,
+  readFloat16LE,
+  readFloat16LESync,
   readFloat32BE,
   readFloat32BESync,
   readFloat32LE,
@@ -62,6 +66,10 @@ import {
   writeBigVarUint64BESync,
   writeBigVarUint64LE,
   writeBigVarUint64LESync,
+  writeFloat16BE,
+  writeFloat16BESync,
+  writeFloat16LE,
+  writeFloat16LESync,
   writeFloat32BE,
   writeFloat32BESync,
   writeFloat32LE,
@@ -678,6 +686,58 @@ Deno.test("readBigVarUint64BESync", { permissions: "none" }, () => {
   }
 });
 
+Deno.test("readFloat16LE", { permissions: "none" }, async () => {
+  {
+    const p = new Uint8ArrayReader(Uint8Array.of(0x70, 0x41));
+    const r = p.asStream().getReader({ mode: "byob" });
+    assertStrictEquals(await readFloat16LE(r), 2.71875);
+    assertStrictEquals(await readFloat16LE(r), null);
+  }
+  {
+    const p = new Uint8ArrayReader(Uint8Array.of(0x70));
+    const r = p.asStream().getReader({ mode: "byob" });
+    await assertRejects(() => readFloat16LE(r), Deno.errors.UnexpectedEof);
+  }
+});
+
+Deno.test("readFloat16LESync", { permissions: "none" }, () => {
+  {
+    const r = new Uint8ArrayReader(Uint8Array.of(0x70, 0x41));
+    assertStrictEquals(readFloat16LESync(r), 2.71875);
+    assertStrictEquals(readFloat16LESync(r), null);
+  }
+  {
+    const r = new Uint8ArrayReader(Uint8Array.of(0x70));
+    assertThrows(() => readFloat16LESync(r), Deno.errors.UnexpectedEof);
+  }
+});
+
+Deno.test("readFloat16BE", { permissions: "none" }, async () => {
+  {
+    const p = new Uint8ArrayReader(Uint8Array.of(0x41, 0x70));
+    const r = p.asStream().getReader({ mode: "byob" });
+    assertStrictEquals(await readFloat16BE(r), 2.71875);
+    assertStrictEquals(await readFloat16BE(r), null);
+  }
+  {
+    const p = new Uint8ArrayReader(Uint8Array.of(0x41));
+    const r = p.asStream().getReader({ mode: "byob" });
+    await assertRejects(() => readFloat16BE(r), Deno.errors.UnexpectedEof);
+  }
+});
+
+Deno.test("readFloat16BESync", { permissions: "none" }, () => {
+  {
+    const r = new Uint8ArrayReader(Uint8Array.of(0x41, 0x70));
+    assertStrictEquals(readFloat16BESync(r), 2.71875);
+    assertStrictEquals(readFloat16BESync(r), null);
+  }
+  {
+    const r = new Uint8ArrayReader(Uint8Array.of(0x41));
+    assertThrows(() => readFloat16BESync(r), Deno.errors.UnexpectedEof);
+  }
+});
+
 Deno.test("readFloat32LE", { permissions: "none" }, async () => {
   {
     const p = new Uint8ArrayReader(Uint8Array.of(0x54, 0xf8, 0x2d, 0x40));
@@ -988,6 +1048,32 @@ Deno.test("writeBigVarUint64BESync", { permissions: "none" }, () => {
     w.bytes,
     Uint8Array.of(0x81, 0x87, 0xb2, 0xd0, 0xe4, 0x98, 0xbb, 0x95, 0x86, 0x21),
   );
+});
+
+Deno.test("writeFloat16LE", { permissions: "none" }, async () => {
+  const p = new Uint8ArrayWriter();
+  const w = p.asStream().getWriter();
+  await writeFloat16LE(w, 2.71875);
+  assertEquals(p.bytes, Uint8Array.of(0x70, 0x41));
+});
+
+Deno.test("writeFloat16LESync", { permissions: "none" }, () => {
+  const w = new Uint8ArrayWriter();
+  writeFloat16LESync(w, 2.71875);
+  assertEquals(w.bytes, Uint8Array.of(0x70, 0x41));
+});
+
+Deno.test("writeFloat16BE", { permissions: "none" }, async () => {
+  const p = new Uint8ArrayWriter();
+  const w = p.asStream().getWriter();
+  await writeFloat16BE(w, 2.71875);
+  assertEquals(p.bytes, Uint8Array.of(0x41, 0x70));
+});
+
+Deno.test("writeFloat16BESync", { permissions: "none" }, () => {
+  const w = new Uint8ArrayWriter();
+  writeFloat16BESync(w, 2.71875);
+  assertEquals(w.bytes, Uint8Array.of(0x41, 0x70));
 });
 
 Deno.test("writeFloat32LE", { permissions: "none" }, async () => {
