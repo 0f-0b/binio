@@ -12,7 +12,7 @@ import {
   Uint8ArrayWriter,
   unexpectedEof,
   writeVarUint32LESync,
-} from "jsr:@ud2/binio";
+} from "@ud2/binio";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder(undefined, { fatal: true, ignoreBOM: true });
