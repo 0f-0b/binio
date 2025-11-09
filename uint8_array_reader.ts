@@ -14,6 +14,11 @@ export class Uint8ArrayReader implements ReaderSync {
     this.#buffer = bytes;
   }
 
+  /** The yet unread part of the {@linkcode Uint8Array}. */
+  get remaining(): Uint8Array<ArrayBuffer> {
+    return this.#buffer;
+  }
+
   /**
    * Copies up to `buf.length` bytes from the {@linkcode Uint8Array} into `buf`.
    *
@@ -38,14 +43,15 @@ export class Uint8ArrayReader implements ReaderSync {
   }
 
   /**
-   * Consumes all remaining bytes from the {@linkcode Uint8Array}.
+   * Skips over and discards up to `n` bytes from the {@linkcode Uint8Array}.
    *
-   * @returns The bytes read.
+   * @returns The number of bytes skipped.
    */
-  readAll(): Uint8Array<ArrayBuffer> {
+  skip(n: number): number {
     const buffer = this.#buffer;
-    this.#buffer = buffer.subarray(buffer.length);
-    return buffer;
+    const available = min(buffer.length, n);
+    this.#buffer = buffer.subarray(available);
+    return available;
   }
 
   /** Returns a readable byte stream backed by this reader. */
@@ -72,9 +78,10 @@ export class Uint8ArrayReaderStream extends ReadableByteStream {
           }
           controller.byobRequest.respond(read.length);
         } else {
-          const read = reader.readAll();
-          if (read.length !== 0) {
-            controller.enqueue(read);
+          const bytes = reader.remaining;
+          if (bytes.length !== 0) {
+            reader.skip(bytes.length);
+            controller.enqueue(bytes);
           }
           controller.close();
         }
