@@ -7,8 +7,7 @@ import {
   encodeVarUint32LE,
 } from "./encode_varint.ts";
 import { readFull, readFullSync } from "./read_full.ts";
-import type { Uint8ArrayReader } from "./uint8_array_reader.ts";
-import type { Uint8ArrayWriter } from "./uint8_array_writer.ts";
+import type { ReaderSync, WriterSync } from "./types.ts";
 import { unexpectedEof } from "./unexpected_eof.ts";
 
 const { min } = Math;
@@ -43,7 +42,7 @@ export async function readInt8(
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readInt8Sync(r: Uint8ArrayReader): number | null {
+export function readInt8Sync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf1) && syncView.getInt8(0);
 }
 
@@ -70,7 +69,7 @@ export async function readUint8(
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readUint8Sync(r: Uint8ArrayReader): number | null {
+export function readUint8Sync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf1) && syncView.getUint8(0);
 }
 
@@ -81,8 +80,8 @@ export function readUint8Sync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -99,12 +98,12 @@ export async function readInt16LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readInt16LESync(r: Uint8ArrayReader): number | null {
+export function readInt16LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getInt16(0, true);
 }
 
@@ -115,8 +114,8 @@ export function readInt16LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -133,12 +132,12 @@ export async function readInt16BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readInt16BESync(r: Uint8ArrayReader): number | null {
+export function readInt16BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getInt16(0);
 }
 
@@ -149,8 +148,8 @@ export function readInt16BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -167,12 +166,12 @@ export async function readUint16LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readUint16LESync(r: Uint8ArrayReader): number | null {
+export function readUint16LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getUint16(0, true);
 }
 
@@ -183,8 +182,8 @@ export function readUint16LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -201,12 +200,12 @@ export async function readUint16BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readUint16BESync(r: Uint8ArrayReader): number | null {
+export function readUint16BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getUint16(0);
 }
 
@@ -217,8 +216,8 @@ export function readUint16BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -235,12 +234,12 @@ export async function readInt32LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readInt32LESync(r: Uint8ArrayReader): number | null {
+export function readInt32LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getInt32(0, true);
 }
 
@@ -251,8 +250,8 @@ export function readInt32LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -269,12 +268,12 @@ export async function readInt32BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readInt32BESync(r: Uint8ArrayReader): number | null {
+export function readInt32BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getInt32(0);
 }
 
@@ -285,8 +284,8 @@ export function readInt32BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -303,12 +302,12 @@ export async function readUint32LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readUint32LESync(r: Uint8ArrayReader): number | null {
+export function readUint32LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getUint32(0, true);
 }
 
@@ -319,8 +318,8 @@ export function readUint32LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -337,12 +336,12 @@ export async function readUint32BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readUint32BESync(r: Uint8ArrayReader): number | null {
+export function readUint32BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getUint32(0);
 }
 
@@ -353,8 +352,8 @@ export function readUint32BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -371,12 +370,12 @@ export async function readBigInt64LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigInt64LESync(r: Uint8ArrayReader): bigint | null {
+export function readBigInt64LESync(r: ReaderSync): bigint | null {
   return readFullSync(r, syncBuf8) && syncView.getBigInt64(0, true);
 }
 
@@ -387,8 +386,8 @@ export function readBigInt64LESync(r: Uint8ArrayReader): bigint | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit signed integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -405,12 +404,12 @@ export async function readBigInt64BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit signed integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit signed integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigInt64BESync(r: Uint8ArrayReader): bigint | null {
+export function readBigInt64BESync(r: ReaderSync): bigint | null {
   return readFullSync(r, syncBuf8) && syncView.getBigInt64(0);
 }
 
@@ -421,8 +420,8 @@ export function readBigInt64BESync(r: Uint8ArrayReader): bigint | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -439,12 +438,12 @@ export async function readBigUint64LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigUint64LESync(r: Uint8ArrayReader): bigint | null {
+export function readBigUint64LESync(r: ReaderSync): bigint | null {
   return readFullSync(r, syncBuf8) && syncView.getBigUint64(0, true);
 }
 
@@ -455,8 +454,8 @@ export function readBigUint64LESync(r: Uint8ArrayReader): bigint | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit unsigned integer.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -473,12 +472,12 @@ export async function readBigUint64BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit unsigned integer.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit unsigned integer.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigUint64BESync(r: Uint8ArrayReader): bigint | null {
+export function readBigUint64BESync(r: ReaderSync): bigint | null {
   return readFullSync(r, syncBuf8) && syncView.getBigUint64(0);
 }
 
@@ -530,12 +529,12 @@ export async function readVarInt32LE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 32-bit signed integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readVarInt32LESync(r: Uint8ArrayReader): number | null {
+export function readVarInt32LESync(r: ReaderSync): number | null {
   let result = 0;
   let len = 0;
   for (;;) {
@@ -605,12 +604,12 @@ export async function readVarUint32LE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 32-bit unsigned integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readVarUint32LESync(r: Uint8ArrayReader): number | null {
+export function readVarUint32LESync(r: ReaderSync): number | null {
   let result = 0;
   let len = 0;
   for (;;) {
@@ -679,12 +678,12 @@ export async function readVarUint32BE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 32-bit unsigned integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readVarUint32BESync(r: Uint8ArrayReader): number | null {
+export function readVarUint32BESync(r: ReaderSync): number | null {
   let result = 0;
   let len = 0;
   for (;;) {
@@ -754,12 +753,12 @@ export async function readBigVarInt64LE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 64-bit signed integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigVarInt64LESync(r: Uint8ArrayReader): bigint | null {
+export function readBigVarInt64LESync(r: ReaderSync): bigint | null {
   let result = 0n;
   let len = 0;
   for (;;) {
@@ -829,12 +828,12 @@ export async function readBigVarUint64LE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 64-bit unsigned integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigVarUint64LESync(r: Uint8ArrayReader): bigint | null {
+export function readBigVarUint64LESync(r: ReaderSync): bigint | null {
   let result = 0n;
   let len = 0;
   for (;;) {
@@ -903,12 +902,12 @@ export async function readBigVarUint64BE(
  *
  * - {@linkcode TypeError} &ndash; The number of bytes with the continuation bit
  *   set exceeds the maximum a 64-bit unsigned integer can be encoded to.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the last
- *   byte have the continuation bit set.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but the last byte read
+ *   has the continuation bit set.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readBigVarUint64BESync(r: Uint8ArrayReader): bigint | null {
+export function readBigVarUint64BESync(r: ReaderSync): bigint | null {
   let result = 0n;
   let len = 0;
   for (;;) {
@@ -937,8 +936,8 @@ export function readBigVarUint64BESync(r: Uint8ArrayReader): bigint | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -955,12 +954,12 @@ export async function readFloat16LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat16LESync(r: Uint8ArrayReader): number | null {
+export function readFloat16LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getFloat16(0, true);
 }
 
@@ -971,8 +970,8 @@ export function readFloat16LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 16-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 16-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -989,12 +988,12 @@ export async function readFloat16BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 16-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 16-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat16BESync(r: Uint8ArrayReader): number | null {
+export function readFloat16BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf2) && syncView.getFloat16(0);
 }
 
@@ -1005,8 +1004,8 @@ export function readFloat16BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -1023,12 +1022,12 @@ export async function readFloat32LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat32LESync(r: Uint8ArrayReader): number | null {
+export function readFloat32LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getFloat32(0, true);
 }
 
@@ -1039,8 +1038,8 @@ export function readFloat32LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 32-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 32-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -1057,12 +1056,12 @@ export async function readFloat32BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 32-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 32-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat32BESync(r: Uint8ArrayReader): number | null {
+export function readFloat32BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf4) && syncView.getFloat32(0);
 }
 
@@ -1073,8 +1072,8 @@ export function readFloat32BESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -1091,12 +1090,12 @@ export async function readFloat64LE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat64LESync(r: Uint8ArrayReader): number | null {
+export function readFloat64LESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf8) && syncView.getFloat64(0, true);
 }
 
@@ -1107,8 +1106,8 @@ export function readFloat64LESync(r: Uint8ArrayReader): number | null {
  *
  * - {@linkcode TypeError} &ndash; `r.releaseLock()` is called before the
  *   returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to form a 64-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to form a 64-bit floating-point number.
  *
  * @returns A {@linkcode Promise} that fulfills with the resulting value, or
  * `null` if the stream ends before any bytes are read.
@@ -1125,12 +1124,12 @@ export async function readFloat64BE(
  *
  * ### Exceptions
  *
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to form a 64-bit floating-point number.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to form a 64-bit floating-point number.
  *
  * @returns The resulting value, or `null` if no bytes can be read.
  */
-export function readFloat64BESync(r: Uint8ArrayReader): number | null {
+export function readFloat64BESync(r: ReaderSync): number | null {
   return readFullSync(r, syncBuf8) && syncView.getFloat64(0);
 }
 
@@ -1151,7 +1150,7 @@ export async function writeInt8(
 }
 
 /** Writes the 8-bit signed or unsigned integer `value` to `w`. */
-export function writeInt8Sync(w: Uint8ArrayWriter, value: number): undefined {
+export function writeInt8Sync(w: WriterSync, value: number): undefined {
   syncView.setInt8(0, value);
   w.write(syncBuf1);
 }
@@ -1177,10 +1176,7 @@ export async function writeInt16LE(
  * Writes the 16-bit signed or unsigned integer `value` to `w` in little-endian
  * format.
  */
-export function writeInt16LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeInt16LESync(w: WriterSync, value: number): undefined {
   syncView.setInt16(0, value, true);
   w.write(syncBuf2);
 }
@@ -1206,10 +1202,7 @@ export async function writeInt16BE(
  * Writes the 16-bit signed or unsigned integer `value` to `w` in big-endian
  * format.
  */
-export function writeInt16BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeInt16BESync(w: WriterSync, value: number): undefined {
   syncView.setInt16(0, value);
   w.write(syncBuf2);
 }
@@ -1235,10 +1228,7 @@ export async function writeInt32LE(
  * Writes the 32-bit signed or unsigned integer `value` to `w` in little-endian
  * format.
  */
-export function writeInt32LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeInt32LESync(w: WriterSync, value: number): undefined {
   syncView.setInt32(0, value, true);
   w.write(syncBuf4);
 }
@@ -1264,10 +1254,7 @@ export async function writeInt32BE(
  * Writes the 32-bit signed or unsigned integer `value` to `w` in big-endian
  * format.
  */
-export function writeInt32BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeInt32BESync(w: WriterSync, value: number): undefined {
   syncView.setInt32(0, value);
   w.write(syncBuf4);
 }
@@ -1293,10 +1280,7 @@ export async function writeBigInt64LE(
  * Writes the 64-bit signed or unsigned integer `value` to `w` in little-endian
  * format.
  */
-export function writeBigInt64LESync(
-  w: Uint8ArrayWriter,
-  value: bigint,
-): undefined {
+export function writeBigInt64LESync(w: WriterSync, value: bigint): undefined {
   syncView.setBigInt64(0, value, true);
   w.write(syncBuf8);
 }
@@ -1322,10 +1306,7 @@ export async function writeBigInt64BE(
  * Writes the 64-bit signed or unsigned integer `value` to `w` in big-endian
  * format.
  */
-export function writeBigInt64BESync(
-  w: Uint8ArrayWriter,
-  value: bigint,
-): undefined {
+export function writeBigInt64BESync(w: WriterSync, value: bigint): undefined {
   syncView.setBigInt64(0, value);
   w.write(syncBuf8);
 }
@@ -1350,10 +1331,7 @@ export async function writeVarInt32LE(
  * Writes the 32-bit signed integer `value` to `w` in
  * {@link https://en.wikipedia.org/wiki/LEB128 LEB128} format.
  */
-export function writeVarInt32LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeVarInt32LESync(w: WriterSync, value: number): undefined {
   const len = encodeVarInt32LE(syncBuf, value);
   w.write(syncBuf.subarray(0, len));
 }
@@ -1378,10 +1356,7 @@ export async function writeVarUint32LE(
  * Writes the 32-bit unsigned integer `value` to `w` in
  * {@link https://en.wikipedia.org/wiki/LEB128 LEB128} format.
  */
-export function writeVarUint32LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeVarUint32LESync(w: WriterSync, value: number): undefined {
   const len = encodeVarUint32LE(syncBuf, value);
   w.write(syncBuf.subarray(0, len));
 }
@@ -1406,10 +1381,7 @@ export async function writeVarUint32BE(
  * Writes the 32-bit unsigned integer `value` to `w` in
  * {@link https://en.wikipedia.org/wiki/Variable-length_quantity VLQ} format.
  */
-export function writeVarUint32BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeVarUint32BESync(w: WriterSync, value: number): undefined {
   const len = encodeVarUint32BE(syncBuf, value);
   w.write(syncBuf.subarray(0, len));
 }
@@ -1435,7 +1407,7 @@ export async function writeBigVarInt64LE(
  * {@link https://en.wikipedia.org/wiki/LEB128 LEB128} format.
  */
 export function writeBigVarInt64LESync(
-  w: Uint8ArrayWriter,
+  w: WriterSync,
   value: bigint,
 ): undefined {
   const len = encodeBigVarInt64LE(syncBuf, value);
@@ -1463,7 +1435,7 @@ export async function writeBigVarUint64LE(
  * {@link https://en.wikipedia.org/wiki/LEB128 LEB128} format.
  */
 export function writeBigVarUint64LESync(
-  w: Uint8ArrayWriter,
+  w: WriterSync,
   value: bigint,
 ): undefined {
   const len = encodeBigVarUint64LE(syncBuf, value);
@@ -1491,7 +1463,7 @@ export async function writeBigVarUint64BE(
  * {@link https://en.wikipedia.org/wiki/Variable-length_quantity VLQ} format.
  */
 export function writeBigVarUint64BESync(
-  w: Uint8ArrayWriter,
+  w: WriterSync,
   value: bigint,
 ): undefined {
   const len = encodeBigVarUint64BE(syncBuf, value);
@@ -1519,10 +1491,7 @@ export async function writeFloat16LE(
  * Writes the 16-bit floating-point number `value` to `w` in little-endian
  * format.
  */
-export function writeFloat16LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat16LESync(w: WriterSync, value: number): undefined {
   syncView.setFloat16(0, value, true);
   w.write(syncBuf2);
 }
@@ -1546,10 +1515,7 @@ export async function writeFloat16BE(
 /**
  * Writes the 16-bit floating-point number `value` to `w` in big-endian format.
  */
-export function writeFloat16BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat16BESync(w: WriterSync, value: number): undefined {
   syncView.setFloat16(0, value);
   w.write(syncBuf2);
 }
@@ -1575,10 +1541,7 @@ export async function writeFloat32LE(
  * Writes the 32-bit floating-point number `value` to `w` in little-endian
  * format.
  */
-export function writeFloat32LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat32LESync(w: WriterSync, value: number): undefined {
   syncView.setFloat32(0, value, true);
   w.write(syncBuf4);
 }
@@ -1602,10 +1565,7 @@ export async function writeFloat32BE(
 /**
  * Writes the 32-bit floating-point number `value` to `w` in big-endian format.
  */
-export function writeFloat32BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat32BESync(w: WriterSync, value: number): undefined {
   syncView.setFloat32(0, value);
   w.write(syncBuf4);
 }
@@ -1631,10 +1591,7 @@ export async function writeFloat64LE(
  * Writes the 64-bit floating-point number `value` to `w` in little-endian
  * format.
  */
-export function writeFloat64LESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat64LESync(w: WriterSync, value: number): undefined {
   syncView.setFloat64(0, value, true);
   w.write(syncBuf8);
 }
@@ -1658,10 +1615,7 @@ export async function writeFloat64BE(
 /**
  * Writes the 64-bit floating-point number `value` to `w` in big-endian format.
  */
-export function writeFloat64BESync(
-  w: Uint8ArrayWriter,
-  value: number,
-): undefined {
+export function writeFloat64BESync(w: WriterSync, value: number): undefined {
   syncView.setFloat64(0, value);
   w.write(syncBuf8);
 }

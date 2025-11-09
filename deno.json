@@ -6,7 +6,7 @@
     "./buffered-writable-stream": "./buffered_writable_stream.ts",
     "./numeric": "./numeric.ts",
     "./read-full": "./read_full.ts",
-    "./readable-byte-stream": "./readable_byte_stream.ts",
+    "./types": "./types.ts",
     "./uint8-array-reader": "./uint8_array_reader.ts",
     "./uint8-array-writer": "./uint8_array_writer.ts",
     "./unexpected-eof": "./unexpected_eof.ts"

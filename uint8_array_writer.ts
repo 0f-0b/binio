@@ -1,3 +1,5 @@
+import type { WriterSync } from "./types.ts";
+
 const { max } = Math;
 
 function mightGrow(array: Uint8Array, originalLength: number): boolean {
@@ -6,7 +8,7 @@ function mightGrow(array: Uint8Array, originalLength: number): boolean {
 }
 
 /** A byte writer that produces a {@linkcode Uint8Array}. */
-export class Uint8ArrayWriter {
+export class Uint8ArrayWriter implements WriterSync {
   #buffer: Uint8Array<ArrayBuffer>;
 
   /**
@@ -24,18 +26,18 @@ export class Uint8ArrayWriter {
   }
 
   /**
-   * Appends `chunk` to the {@linkcode Uint8Array}.
+   * Appends `buf` to the {@linkcode Uint8Array}.
    *
    * ### Exceptions
    *
    * - {@linkcode RangeError} &ndash; The {@linkcode Uint8Array} cannot be
    *   reallocated.
    */
-  write(chunk: Uint8Array): undefined {
+  write(buf: Uint8Array): undefined {
     const buffer = this.#buffer;
-    const provided = chunk.length;
-    if (mightGrow(chunk, provided)) {
-      chunk = chunk.subarray(0, provided);
+    const provided = buf.length;
+    if (mightGrow(buf, provided)) {
+      buf = buf.subarray(0, provided);
     }
     const buffered = buffer.length;
     let storage = buffer.buffer;
@@ -44,7 +46,7 @@ export class Uint8ArrayWriter {
       storage = storage.transfer(max(total, storage.byteLength * 2));
     }
     this.#buffer = new Uint8Array(storage, 0, total);
-    this.#buffer.set(chunk, buffered);
+    this.#buffer.set(buf, buffered);
   }
 
   /** Returns a writable byte stream backed by this writer. */

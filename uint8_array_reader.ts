@@ -1,9 +1,9 @@
-import { ReadableByteStream } from "./readable_byte_stream.ts";
+import { ReadableByteStream, type ReaderSync } from "./types.ts";
 
 const { min } = Math;
 
 /** A byte reader that consumes a {@linkcode Uint8Array}. */
-export class Uint8ArrayReader {
+export class Uint8ArrayReader implements ReaderSync {
   #buffer: Uint8Array<ArrayBuffer>;
 
   /**
@@ -15,8 +15,7 @@ export class Uint8ArrayReader {
   }
 
   /**
-   * Consumes at most `buf.length` bytes from the start of the
-   * {@linkcode Uint8Array} and writes them into `buf`.
+   * Copies up to `buf.length` bytes from the {@linkcode Uint8Array} into `buf`.
    *
    * ### Exceptions
    *

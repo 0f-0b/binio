@@ -1,4 +1,4 @@
-import type { Uint8ArrayReader } from "./uint8_array_reader.ts";
+import type { ReaderSync } from "./types.ts";
 import { unexpectedEof } from "./unexpected_eof.ts";
 
 /**
@@ -10,8 +10,8 @@ import { unexpectedEof } from "./unexpected_eof.ts";
  *
  * - {@linkcode TypeError} &ndash; `buf` is empty, or `r.releaseLock()` is
  *   called before the returned promise resolves.
- * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but the bytes
- *   read are not enough to fill `buf`.
+ * - {@linkcode UnexpectedEof} &ndash; The stream reaches the end but there are
+ *   not enough bytes to fill `buf`.
  *
  * @returns A {@linkcode Promise} that fulfills with a {@linkcode Uint8Array}
  * over the same memory region as the original `buf` containing the bytes read,
@@ -37,16 +37,16 @@ export async function readFull(
  * ### Exceptions
  *
  * - {@linkcode TypeError} &ndash; `buf` is empty.
- * - {@linkcode UnexpectedEof} &ndash; `r` is completely consumed but the bytes
- *   read are not enough to fill `buf`.
+ * - {@linkcode UnexpectedEof} &ndash; `r` is exhausted but there are not enough
+ *   bytes to fill `buf`.
  *
  * @returns A {@linkcode Uint8Array} over the same memory region as `buf`
  * containing the bytes read, or `null` if no bytes can be read.
  */
-export function readFullSync<B extends ArrayBufferLike>(
-  r: Uint8ArrayReader,
-  buf: Uint8Array<B>,
-): Uint8Array<B> | null {
+export function readFullSync(
+  r: ReaderSync,
+  buf: Uint8Array<ArrayBuffer>,
+): Uint8Array<ArrayBuffer> | null {
   const requested = buf.length;
   buf = r.read(buf);
   if (buf.length === 0) {

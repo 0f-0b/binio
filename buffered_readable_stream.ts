@@ -1,4 +1,4 @@
-import { ReadableByteStream } from "./readable_byte_stream.ts";
+import { ReadableByteStream } from "./types.ts";
 
 const { min } = Math;
 
