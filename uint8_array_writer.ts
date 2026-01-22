@@ -49,6 +49,15 @@ export class Uint8ArrayWriter implements WriterSync {
     this.#buffer.set(buf, buffered);
   }
 
+  /**
+   * Truncates the {@linkcode Uint8Array} to up to `n` bytes long.
+   *
+   * This method does not reallocate the {@linkcode Uint8Array}.
+   */
+  truncate(n: number): undefined {
+    this.#buffer = this.#buffer.subarray(0, n);
+  }
+
   /** Returns a writable byte stream backed by this writer. */
   asStream(): Uint8ArrayWriterStream {
     return new Uint8ArrayWriterStream(this);
