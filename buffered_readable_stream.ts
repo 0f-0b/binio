@@ -47,18 +47,13 @@ export class BufferedReadableStream extends ReadableByteStream {
     super({
       pull: async (controller) => {
         const view = controller.byobRequest!.view!;
-        const buf = new Uint8Array(
-          view.buffer,
-          view.byteOffset,
-          view.byteLength,
-        );
-        const requested = buf.length;
+        const requested = view.length;
         const reader = this.#reader;
         let buffer = this.#buffer;
         if (buffer.length === 0) {
           const highWaterMark = buffer.buffer.byteLength;
           if (requested >= highWaterMark) {
-            const result = await reader.read(buf);
+            const result = await reader.read(view);
             if (result.done) {
               controller.close();
               controller.byobRequest!.respond(0);
@@ -76,7 +71,7 @@ export class BufferedReadableStream extends ReadableByteStream {
           buffer = result.value;
         }
         const available = min(buffer.length, requested);
-        buf.set(buffer.subarray(0, available));
+        view.set(buffer.subarray(0, available));
         this.#buffer = buffer.subarray(available);
         controller.byobRequest!.respond(available);
       },

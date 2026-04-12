@@ -67,12 +67,7 @@ export class Uint8ArrayReaderStream extends ReadableByteStream {
       pull(controller) {
         if (controller.byobRequest) {
           const view = controller.byobRequest.view!;
-          const buf = new Uint8Array(
-            view.buffer,
-            view.byteOffset,
-            view.byteLength,
-          );
-          const read = reader.read(buf);
+          const read = reader.read(view);
           if (read.length === 0) {
             controller.close();
           }
