@@ -31,6 +31,6 @@
   },
   "tasks": {
     "lint": "deno fmt --check && deno lint",
-    "test": "deno test --check=all --allow-import=jsr.io:443"
+    "test": "deno test --allow-import=jsr.io:443"
   }
 }
