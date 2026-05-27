@@ -1,11 +1,11 @@
-import { assertEquals } from "@std/assert/equals";
+import assert from "node:assert/strict";
 
 import { BufferedWritableStream } from "./buffered_writable_stream.ts";
 
 Deno.test("writable", { permissions: "none" }, async () => {
   const chunks: Uint8Array[] = [];
   const assertNewChunks = (expected: readonly Uint8Array[]) => {
-    assertEquals(chunks, expected);
+    assert.deepEqual(chunks, expected);
     chunks.length = 0;
   };
   const writable = new WritableStream<Uint8Array>({
